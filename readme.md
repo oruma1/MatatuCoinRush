@@ -1,9 +1,9 @@
 # Matatu Coin Rush — Complete Unity Game
 
-## 🎮 Game Overview
+##  Game Overview
 Matatu Coin Rush is an endless runner game set in Nairobi, Kenya. Drive your matatu through the streets, collect coins, avoid obstacles, and learn amazing facts about Nairobi!
 
-## 📋 Marking Points Covered
+##  Marking Points Covered
 
 | # | Requirement | Implementation |
 |---|-------------|----------------|
@@ -131,7 +131,7 @@ Create particle systems for:
 - Obstacle explosion
 - Speed boost effect
 
-## 🎮 Controls
+##  Controls
 
 | Action | Keyboard | Mobile |
 |--------|----------|--------|
@@ -139,7 +139,7 @@ Create particle systems for:
 | Move Right | Right Arrow / D | Swipe Right |
 | Jump | Space / Up Arrow / W | Swipe Up |
 
-## 🏆 Game Features
+##  Game Features
 
 - **Progressive Difficulty**: Speed increases over time
 - **Coin Streaks**: Earn bonus points for consecutive coins
@@ -148,14 +148,14 @@ Create particle systems for:
 - **Score Multiplier**: Streaks multiply your score
 - **Best Score**: Saved locally with PlayerPrefs
 
-## 🎨 Visual Style
+##  Visual Style
 
 - Colorful matatu art style
 - Warm Nairobi sunset lighting
 - African-inspired UI fonts and colors
 - Urban environment with buildings and trees
 
-## 🔊 Audio Design
+##  Audio Design
 
 - Upbeat Afrobeat background music
 - Satisfying coin collection sound
@@ -163,7 +163,7 @@ Create particle systems for:
 - Impact sounds for obstacles
 - Boost activation sound effect
 
-## 📱 Mobile Optimization
+##  Mobile Optimization
 
 - Touch swipe controls
 - Portrait mode recommended
@@ -171,16 +171,16 @@ Create particle systems for:
 - Optimized particle systems
 - Mobile-friendly font sizes
 
-## 🐛 Troubleshooting
+##  Troubleshooting
 
 **Player not moving**: Check if GameManager is running
 **Objects not spawning**: Verify prefabs are assigned
 **No sound**: Check AudioSource and audio clips
 **No animation**: Verify Animator Controller is assigned
 
- 📝 Credits
+  Credits
 
-- Game Design: [Your Name]
+- Game Design: [Albert Oruma, Nadine Njorah, Raymond Benaiah]
 - Nairobi Facts: Research from various sources
 - Sound Effects: [Free sound library credits]
 - 3D Models: Mixamo, Unity Asset Store
