@@ -1,0 +1,136 @@
+using UnityEngine;
+
+public class RoadObstacle : MonoBehaviour
+{
+    [Header("Obstacle Type")]
+    public ObstacleType obstacleType = ObstacleType.Cones;
+    public float damageRadius = 2f;
+    
+    [Header("Visual Effects")]
+    public GameObject hitEffect;
+    public GameObject obstacleMesh;
+    public Material[] damageMaterials;
+    
+    [Header("Animation")]
+    public float shakeDuration = 0.5f;
+    public float shakeIntensity = 0.2f;
+    public float wobbleSpeed = 2f;
+    
+    [Header("Audio")]
+    public AudioClip impactSound;
+    public AudioClip warningSound;
+    
+    private Vector3 originalPosition;
+    private Vector3 originalRotation;
+    private bool isShaking = false;
+    private float shakeTimer = 0f;
+    private float wobbleTimer = 0f;
+    private bool isDamaged = false;
+    private AudioSource audioSource;
+    
+    public enum ObstacleType
+    {
+        Cones,
+        Barriers,
+        Potholes,
+        BrokenMatatu,
+        RoadBlock
+    }
+    
+    void Start()
+    {
+        originalPosition = transform.position;
+        originalRotation = transform.eulerAngles;
+        
+        audioSource = GetComponent<AudioSource>();
+        if (audioSource == null)
+            audioSource = gameObject.AddComponent<AudioSource>();
+            
+        // Play warning sound if nearby
+        if (warningSound != null && Vector3.Distance(transform.position, Vector3.zero) < 20f)
+        {
+            audioSource.PlayOneShot(warningSound, 0.3f);
+        }
+    }
+    
+    void Update()
+    {
+        if (GameManager.Instance == null) return;
+        
+        // Wobble animation for some obstacles
+        if (obstacleType == ObstacleType.Cones || obstacleType == ObstacleType.Barriers)
+        {
+            wobbleTimer += Time.deltaTime * wobbleSpeed;
+            float wobble = Mathf.Sin(wobbleTimer) * 2f;
+            transform.eulerAngles = originalRotation + new Vector3(0, wobble, 0);
+        }
+        
+        // Shake effect when hit
+        if (isShaking)
+        {
+            shakeTimer -= Time.deltaTime;
+            if (shakeTimer <= 0f)
+            {
+                isShaking = false;
+                transform.position = originalPosition;
+            }
+            else
+            {
+                transform.position = originalPosition + Random.insideUnitSphere * shakeIntensity;
+            }
+        }
+    }
+    
+    void OnTriggerEnter(Collider other)
+    {
+        // Check if hit by player
+        if (other.CompareTag("Player") || other.gameObject.name.Contains("Player"))
+        {
+            Hit();
+        }
+    }
+    
+    public void Hit()
+    {
+        if (isDamaged) return;
+        isDamaged = true;
+        
+        // Shake effect
+        isShaking = true;
+        shakeTimer = shakeDuration;
+        
+        // Play sound
+        if (impactSound != null)
+            audioSource.PlayOneShot(impactSound, 0.7f);
+            
+        // Spawn hit effect
+        if (hitEffect != null)
+        {
+            GameObject effect = Instantiate(hitEffect, transform.position, Quaternion.identity);
+            Destroy(effect, 2f);
+        }
+        
+        // Change material to damaged state
+        if (obstacleMesh != null && damageMaterials.Length > 0)
+        {
+            Renderer renderer = obstacleMesh.GetComponent<Renderer>();
+            if (renderer != null)
+            {
+                renderer.material = damageMaterials[Random.Range(0, damageMaterials.Length)];
+            }
+        }
+        
+        // Notify GameManager
+        GameManager.Instance.HitObstacle();
+        
+        // Destroy after delay
+        Destroy(gameObject, 1.5f);
+    }
+    
+    // For visual debugging
+    void OnDrawGizmosSelected()
+    {
+        Gizmos.color = Color.red;
+        Gizmos.DrawWireSphere(transform.position, damageRadius);
+    }
+}
